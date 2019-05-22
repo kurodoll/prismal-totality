@@ -1,0 +1,30 @@
+{
+    "id": "test",
+    "title": "test",
+    "level": {
+        "width": 10,
+        "height": 10,
+        "tile_width": 15,
+        "tile_height": 15,
+        "camera_zoom": 4,
+        "tileset": "test",
+        "tiles": [
+            "ground", "ground", "ground", "ground", "ground", "ground", "ground", "ground", "ground", "ground",
+            "ground", "ground", "ground", "ground", "ground", "ground", "ground", "ground", "ground", "ground",
+            "ground", "ground", "ground", "ground", "ground", "ground", "ground", "ground", "ground", "ground",
+            "ground", "ground", "ground", "ground", "ground", "ground", "ground", "ground", "ground", "ground",
+            "ground", "ground", "ground", "ground", "ground", "ground", "ground", "ground", "ground", "ground",
+            "ground", "ground", "ground", "ground", "ground", "ground", "ground", "ground", "ground", "ground",
+            "ground", "ground", "ground", "ground", "ground", "ground", "ground", "ground", "ground", "ground",
+            "ground", "ground", "ground", "ground", "ground", "ground", "ground", "ground", "ground", "ground",
+            "ground", "ground", "ground", "ground", "ground", "ground", "ground", "ground", "ground", "ground",
+            "ground", "ground", "ground", "ground", "ground", "ground", "ground", "ground", "ground", "ground"
+        ]
+    },
+    "elements": {
+        "spawn": {
+            "x": 0,
+            "y": 0
+        }
+    }
+}

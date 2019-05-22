@@ -97,7 +97,7 @@ class SceneLogin extends Phaser.Scene {
 
                 // If the user presses enter, log them in
                 else if (key.keyCode == 13) {
-                    ;
+                    socket.emit('login', this.username_entry.text);
                 }
             }
         });

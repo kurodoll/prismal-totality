@@ -17,6 +17,14 @@
         "content_type": "text/javascript",
         "filename": "public/js/Scenes/Login.js"
     },
+    "/scenes/gui": {
+        "content_type": "text/javascript",
+        "filename": "public/js/Scenes/GUI.js"
+    },
+    "/scenes/game": {
+        "content_type": "text/javascript",
+        "filename": "public/js/Scenes/Game.js"
+    },
 
     "/graphics/art/login_bg.jpg": {
         "content_type": "image/jpeg",

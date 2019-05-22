@@ -1,10 +1,17 @@
 from log import log
+from Game import Manager
 
 import json
 import os
 
 import eventlet
 import socketio
+
+
+# -----------------------------------------------------------------------------
+#                                                                    Game Setup
+# -----------------------------------------------------------------------------
+manager = Manager.Manager()
 
 
 # -----------------------------------------------------------------------------
@@ -41,7 +48,7 @@ clients = {}  # A dictionary of clients, including ones that have disconnected
 # When a client connects, begin to store their information
 @sio.on('connect')
 def connect(sid, env):
-    log('server.py', f'Connected: {sid}')
+    log('server.py', f'Connected: {sid}', 'debug')
 
     clients[sid] = {
         'online': True
@@ -50,9 +57,40 @@ def connect(sid, env):
 # When a client disconnects, mark them as such
 @sio.on('disconnect')
 def disconnect(sid):
-    log('server.py', f'Disconnected: {sid}')
+    log('server.py', f'Disconnected: {sid}', 'debug')
 
     clients[sid]['online'] = False
+    clients[sid]['logged in'] = False
+
+# A user has logged in
+@sio.on('login')
+def login(sid, username):
+    log('server.py', f'Login of {username}')
+
+    clients[sid]['username'] = username
+    clients[sid]['logged in'] = True
+
+    manager.addPlayer(sid, username)
+
+    sio.emit('login success', room=sid)
+
+# A user has requested the data of the level they're on.
+# After they're sent the level, they'll want to recieve updates for
+#     anything that happens on the level, so they need to be "linked" with the
+#     level as well
+@sio.on('request present level')
+def request_present_level(sid):
+    level = manager.getPresentLevel(sid)
+
+    if level:
+        sio.emit('present level', level)
+        manager.linkPlayerToLevel(sid, level['id'])
+
+        log(
+            'server.py',
+            f'Sent level {level["id"]} to {clients[sid]["username"]}',
+            'debug'
+        )
 
 
 # -----------------------------------------------------------------------------

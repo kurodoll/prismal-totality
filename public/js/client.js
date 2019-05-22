@@ -8,7 +8,7 @@ $(() => {
         type: Phaser.AUTO,
         width: window.innerWidth,
         height: window.innerHeight,
-        scene: [ SceneLogin ],
+        scene: [ SceneLogin, SceneGUI, SceneGame ],
         render: {
             'pixelArt': true
         }
@@ -16,6 +16,21 @@ $(() => {
 
     const game = new Phaser.Game(phaser_config);
     game.scene.start('login');
+
+
+    // ------------------------------------------------------------------------
+    //                                                    Socket.io Interaction
+    // ------------------------------------------------------------------------
+    socket.on('login success', () => {
+        // Switch to the GUI and Game scenes
+        game.scene.switch('login', 'gui');
+        game.scene.start('game');
+
+        // Since we've just logged in, we want the data of the level that our
+        //     player is on. If our player is a new player, the server will
+        //     set us up at a starting area
+        socket.emit('request present level');
+    });
 
 
     // ------------------------------------------------------------------------
@@ -27,7 +42,7 @@ $(() => {
     });
 
     // If the user presses backspace, don't go back in the browser history.
-    // Instead, forward the keypress to a relevant scene
+    //     Instead, forward the keypress to a relevant scene
     $(document).on('keydown', (e) => {        
         if (e.keyCode == 8) {
            e.preventDefault();
