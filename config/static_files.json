@@ -3,6 +3,7 @@
         "content_type": "text/html",
         "filename": "pages/index.html"
     },
+
     "/js/socket.io": {
         "content_type": "text/javascript",
         "filename": "public/js/socket.io.js"
@@ -10,5 +11,15 @@
     "/js/client.js": {
         "content_type": "text/javascript",
         "filename": "public/js/client.js"
+    },
+
+    "/scenes/login": {
+        "content_type": "text/javascript",
+        "filename": "public/js/Scenes/Login.js"
+    },
+
+    "/graphics/art/login_bg.jpg": {
+        "content_type": "image/jpeg",
+        "filename": "public/graphics/art/login_bg.jpg"
     }
 }

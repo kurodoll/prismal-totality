@@ -8,13 +8,14 @@ $(() => {
         type: Phaser.AUTO,
         width: window.innerWidth,
         height: window.innerHeight,
-        scene: [],
+        scene: [ SceneLogin ],
         render: {
             'pixelArt': true
         }
     };
 
     const game = new Phaser.Game(phaser_config);
+    game.scene.start('login');
 
 
     // ------------------------------------------------------------------------
