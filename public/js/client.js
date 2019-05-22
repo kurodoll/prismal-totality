@@ -25,4 +25,16 @@ $(() => {
     $(window).on('resize', () => {
         game.scale.resize(window.innerWidth, window.innerHeight);
     });
+
+    // If the user presses backspace, don't go back in the browser history.
+    // Instead, forward the keypress to a relevant scene
+    $(document).on('keydown', (e) => {        
+        if (e.keyCode == 8) {
+           e.preventDefault();
+
+           if (game.scene.isActive('login')) {
+               game.scene.getScene('login').keypress(8);
+           }
+        }
+    });
 });
