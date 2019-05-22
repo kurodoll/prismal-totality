@@ -1,0 +1,14 @@
+{
+    "/": {
+        "content_type": "text/html",
+        "filename": "pages/index.html"
+    },
+    "/js/socket.io": {
+        "content_type": "text/javascript",
+        "filename": "public/js/socket.io.js"
+    },
+    "/js/client.js": {
+        "content_type": "text/javascript",
+        "filename": "public/js/client.js"
+    }
+}

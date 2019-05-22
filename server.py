@@ -34,6 +34,28 @@ app = socketio.WSGIApp(sio, static_files=static_files)
 
 
 # -----------------------------------------------------------------------------
+#                                                         Socket.io Interaction
+# -----------------------------------------------------------------------------
+clients = {}  # A dictionary of clients, including ones that have disconnected
+
+# When a client connects, begin to store their information
+@sio.on('connect')
+def connect(sid, env):
+    log('server.py', f'Connected: {sid}')
+
+    clients[sid] = {
+        'online': True
+    }
+
+# When a client disconnects, mark them as such
+@sio.on('disconnect')
+def disconnect(sid):
+    log('server.py', f'Disconnected: {sid}')
+
+    clients[sid]['online'] = False
+
+
+# -----------------------------------------------------------------------------
 #                                                                          Main
 # -----------------------------------------------------------------------------
 if __name__ == '__main__':
