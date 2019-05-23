@@ -16,6 +16,9 @@ manager = Manager.Manager()
 # Message Of The Day
 motd = 'MOTD: Welcome to v0.000...001 of Prismal Totality!'
 
+# Stats
+players_online = 0
+
 
 # -----------------------------------------------------------------------------
 #                                                          Initialize Socket.io
@@ -57,6 +60,9 @@ def connect(sid, env):
         'online': True
     }
 
+    global players_online
+    players_online += 1
+
 # When a client disconnects, mark them as such
 @sio.on('disconnect')
 def disconnect(sid):
@@ -67,6 +73,9 @@ def disconnect(sid):
 
     manager.removePlayer(sid)
     manager.emitUpdates(sio)
+
+    global players_online
+    players_online -= 1
 
 # A user has logged in
 @sio.on('login')
@@ -80,7 +89,15 @@ def login(sid, username):
     manager.emitUpdates(sio)
 
     sio.emit('login success', room=sid)
+
+    # Send login messages to the player
     sio.emit('msg', motd, room=sid)
+
+    sio.emit(
+        'msg',
+        f'There are currently {players_online} players online',
+        room=sid
+    )
 
 # A user has requested the data of the level they're on.
 # After they're sent the level, they'll want to recieve updates for
