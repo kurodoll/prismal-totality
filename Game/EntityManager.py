@@ -11,8 +11,9 @@ class EntityManager:
             'id': ent_id,
             'active': True,
             'components': {},
-            'updated': False  # Whether entity data has changed and needs to be
-                              #     sent to concerned players
+            'updated': True  # Whether entity data has changed and needs to be
+                             #     sent to concerned players. True by default
+                             #     so that new entities get sent out
         }
 
         return ent_id

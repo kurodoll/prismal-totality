@@ -78,8 +78,13 @@ class SceneGame extends Phaser.Scene {
         this.cameras.main.setZoom(level.level.camera_zoom);
 
         // Now handle the entities present on the level
-        for (let i = 0; i < level.entities.length; i++) {
-            if ('sprite' in level.entities[i].components) {
+        this.renderSprites();
+    }
+
+    // Finds sprites in entities and renders them
+    renderSprites() {
+        for (let i = 0; i < this.level.entities.length; i++) {
+            if ('sprite' in this.level.entities[i].components) {
                 const pos_x
                     = this.level.entities[i].components.position.x
                     * this.level.level.tile_width;
@@ -88,8 +93,15 @@ class SceneGame extends Phaser.Scene {
                     = this.level.entities[i].components.position.y
                     * this.level.level.tile_height;
 
-                this.level.entities[i].image =
-                    this.add.sprite(pos_x, pos_y, 'player').setOrigin(0, 0);
+                // If the entity already has a sprite image defined, just
+                //     update it
+                if (this.level.entities[i].image) {
+                    this.level.entities[i].image.x = pos_x;
+                    this.level.entities[i].image.y = pos_y;
+                } else {
+                    this.level.entities[i].image =
+                        this.add.sprite(pos_x, pos_y, 'player').setOrigin(0, 0);
+                }
             }
         }
     }
@@ -97,12 +109,12 @@ class SceneGame extends Phaser.Scene {
     // Given updated entity data, updates those entities locally
     updateEntities(updates) {
         for (let i = 0; i < updates.length; i++) {
-            for (let j = 0; j < this.level.entities.length; j++) {
-                if (!this.level.entities[j]) {
-                    continue;
-                }
+            let match_found = false;
 
+            for (let j = 0; j < this.level.entities.length; j++) {
                 if (updates[i].id == this.level.entities[j].id) {
+                    match_found = true;
+
                     // If the entity has been marked inactive, we'll delete it
                     //     a bit later
                     if (!updates[i].active) {
@@ -114,39 +126,28 @@ class SceneGame extends Phaser.Scene {
                     //     added locally isn't wiped away
                     this.level.entities[j].components = updates[i].components;
 
-                    // If this entity has an image (sprite), it needs to be
-                    //     updated to reflect the data changes
-                    if (this.level.entities[j].image) {
-                        const pos_x
-                            = this.level.entities[j].components.position.x
-                            * this.level.level.tile_width;
-
-                        const pos_y
-                            = this.level.entities[j].components.position.y
-                            * this.level.level.tile_height;
-
-                        this.level.entities[j].image.x = pos_x;
-                        this.level.entities[j].image.y = pos_y;
-                    }
-
                     break;
                 }
+            }
+
+            if (!match_found) {
+                // Must be a new entity
+                this.level.entities.push(updates[i]);
             }
         }
 
         // Now remove no longer active entities entirely
         for (let i = this.level.entities.length - 1; i >= 0; i--) {
-            if (!this.level.entities[i]) {
-                continue;
-            }
-
             if (!this.level.entities[i].active) {
                 if (this.level.entities[i].image) {
                     this.level.entities[i].image.destroy();
                 }
 
-                delete this.level.entities[i];
+                this.level.entities.splice(i, 1);
             }
         }
+
+        // Update the image itself for sprite entities
+        this.renderSprites();
     }
 }

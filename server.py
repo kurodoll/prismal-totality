@@ -74,6 +74,7 @@ def login(sid, username):
     clients[sid]['logged in'] = True
 
     manager.addPlayer(sid, username)
+    manager.emitUpdates(sio)
 
     sio.emit('login success', room=sid)
 
@@ -92,7 +93,7 @@ def request_present_level(sid):
                 level['entities'].remove(e)
 
         # Send the level to the client
-        sio.emit('present level', level)
+        sio.emit('present level', level, room=sid)
         manager.linkPlayerToLevel(sid, level['id'])
 
         log(
