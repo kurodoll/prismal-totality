@@ -13,6 +13,9 @@ import socketio
 # -----------------------------------------------------------------------------
 manager = Manager.Manager()
 
+# Message Of The Day
+motd = 'MOTD: Welcome to v0.000...001 of Prismal Totality!'
+
 
 # -----------------------------------------------------------------------------
 #                                                          Initialize Socket.io
@@ -77,6 +80,7 @@ def login(sid, username):
     manager.emitUpdates(sio)
 
     sio.emit('login success', room=sid)
+    sio.emit('msg', motd, room=sid)
 
 # A user has requested the data of the level they're on.
 # After they're sent the level, they'll want to recieve updates for

@@ -33,6 +33,11 @@ $(() => {
         socket.emit('request present level');
     });
 
+    // Server has sent a message
+    socket.on('msg', (msg) => {
+        game.scene.getScene('gui').message(msg);
+    });
+
     // Server has sent us the data for the level we are one
     socket.on('present level', (level) => {
         // Forward the data to the Game scene to render the level
