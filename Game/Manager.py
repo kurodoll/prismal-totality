@@ -127,16 +127,23 @@ class Manager:
                     pos['x'] += 1
                     pos['y'] -= 1
 
-                if self.WorldManager.validMove(
+                response = self.WorldManager.validMove(
                     self.players[sid]['on level'],
                     pos
-                ):
+                )
+
+                if response['success']:
                     # Mark the entity as updated, so that it will be sent to
                     #     users
                     ent['updated'] = True
                 else:
                     pos['x'] = old_x
                     pos['y'] = old_y
+
+                    return {
+                        'response': 'message',
+                        'data': response['message']
+                    }
 
     # Checks for updated (changed) entities, and sends the updated data to
     #     relevant players (usually players on the same level)

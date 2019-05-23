@@ -75,11 +75,24 @@ class WorldManager:
         h = self.levels[level_id]['level']['height']
 
         if x < 0 or y < 0 or x >= w or y >= h:
-            return False
+            return {
+                'success': False,
+                'message': 'You cannot move there'
+            }
 
         tile = self.levels[level_id]['level']['tiles'][y * w + x]
 
         if tile == 'ground':
-            return True
+            return {
+                'success': True,
+            }
+        elif tile == 'wall':
+            return {
+                'success': False,
+                'message': 'You bump into the wall'
+            }
 
-        return False
+        return {
+            'success': False,
+            'message': 'You cannot move there'
+        }

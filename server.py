@@ -126,7 +126,11 @@ def request_present_level(sid):
 # Handles a user action
 @sio.on('action')
 def action(sid, action_type, details):
-    manager.action(sid, action_type, details)
+    response = manager.action(sid, action_type, details)
+
+    if response:
+        if response['response'] == 'message':
+            sio.emit('msg', response['data'], room=sid)
 
     # Emit any changes that the action might have caused
     manager.emitUpdates(sio)

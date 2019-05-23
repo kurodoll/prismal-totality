@@ -39,6 +39,10 @@ class SceneGUI extends Phaser.Scene {
     // Adds a message to the message log
     message(msg) {
         this.message_box_history.push(msg);
-        this.message_box.text = this.message_box_history.join('\n');
+        this.message_box.text
+            = this.message_box_history.slice(0).slice(-20).join('\n');
+
+        this.message_box_title.text
+            = 'Messages (' + String(this.message_box_history.length) + ')'
     }
 }
