@@ -66,3 +66,20 @@ class WorldManager:
             return self.levels[level_id]
 
         log('WorldManager', f'Request for unloaded level {level_id}', 'error')
+
+    # Checks whether a tile can be moved to
+    def validMove(self, level_id, coords):
+        x = coords['x']
+        y = coords['y']
+        w = self.levels[level_id]['level']['width']
+        h = self.levels[level_id]['level']['height']
+
+        if x < 0 or y < 0 or x >= w or y >= h:
+            return False
+
+        tile = self.levels[level_id]['level']['tiles'][y * w + x]
+
+        if tile == 'ground':
+            return True
+
+        return False

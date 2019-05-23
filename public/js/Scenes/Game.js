@@ -59,7 +59,7 @@ class SceneGame extends Phaser.Scene {
         for (let x = 0; x < level.level.width; x++) {
             for (let y = 0; y < level.level.height; y++) {
                 const tile_type
-                    = level.level.tiles[y * level.level.height + x];
+                    = level.level.tiles[y * level.level.width + x];
 
                 const tileset_index = this.tileset_data[tile_type];
 

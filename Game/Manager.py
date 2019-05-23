@@ -103,6 +103,9 @@ class Manager:
                 ent = self.EntityManager.getEntity(self.players[sid]['entity'])
                 pos = ent['components']['position']
 
+                old_x = pos['x']
+                old_y = pos['y']
+
                 if 'dir' in details.keys() and details['dir'] == '1':
                     pos['x'] -= 1
                     pos['y'] += 1
@@ -124,8 +127,16 @@ class Manager:
                     pos['x'] += 1
                     pos['y'] -= 1
 
-                # Mark the entity as updated, so that it will be sent to users
-                ent['updated'] = True
+                if self.WorldManager.validMove(
+                    self.players[sid]['on level'],
+                    pos
+                ):
+                    # Mark the entity as updated, so that it will be sent to
+                    #     users
+                    ent['updated'] = True
+                else:
+                    pos['x'] = old_x
+                    pos['y'] = old_y
 
     # Checks for updated (changed) entities, and sends the updated data to
     #     relevant players (usually players on the same level)
