@@ -9,16 +9,16 @@
         "camera_zoom": 4,
         "tileset": "test",
         "tiles": [
-            "ground", "ground", "ground", "ground", "ground", "ground", "ground", "ground", "ground", "ground",
-            "ground", "ground", "ground", "ground", "ground", "ground", "ground", "ground", "ground", "ground",
-            "ground", "ground", "ground", "ground", "ground", "ground", "ground", "ground", "ground", "ground",
-            "ground", "ground", "ground", "ground", "ground", "ground", "ground", "ground", "ground", "ground",
-            "ground", "ground", "ground", "ground", "ground", "ground", "ground", "ground", "ground", "ground",
-            "ground", "ground", "ground", "ground", "ground", "ground", "ground", "ground", "ground", "ground",
-            "ground", "ground", "ground", "ground", "ground", "ground", "ground", "ground", "ground", "ground",
-            "ground", "ground", "ground", "ground", "ground", "ground", "ground", "ground", "ground", "ground",
-            "ground", "ground", "ground", "ground", "ground", "ground", "ground", "ground", "ground", "ground",
-            "ground", "ground", "ground", "ground", "ground", "ground", "ground", "ground", "ground", "ground"
+            "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall",
+            "wall", "ground", "ground", "ground", "ground", "ground", "ground", "ground", "ground", "wall",
+            "wall", "ground", "ground", "ground", "ground", "ground", "ground", "ground", "ground", "wall",
+            "wall", "ground", "ground", "ground", "ground", "ground", "ground", "ground", "ground", "wall",
+            "wall", "ground", "ground", "ground", "ground", "ground", "ground", "ground", "ground", "wall",
+            "wall", "ground", "ground", "ground", "ground", "ground", "ground", "ground", "ground", "wall",
+            "wall", "ground", "ground", "ground", "ground", "ground", "ground", "ground", "ground", "wall",
+            "wall", "ground", "ground", "ground", "ground", "ground", "ground", "ground", "ground", "wall",
+            "wall", "ground", "ground", "ground", "ground", "ground", "ground", "ground", "ground", "wall",
+            "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall"
         ]
     },
     "elements": {

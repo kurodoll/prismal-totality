@@ -29,5 +29,13 @@
     "/graphics/art/login_bg.jpg": {
         "content_type": "image/jpeg",
         "filename": "public/graphics/art/login_bg.jpg"
+    },
+    "/graphics/tilesets/test": {
+        "content_type": "image/png",
+        "filename": "public/graphics/tilesets/test.png"
+    },
+    "/data/tilesets/test": {
+        "content_type": "text/json",
+        "filename": "Game/data/tilesets/test.json"
     }
 }

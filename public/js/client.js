@@ -15,7 +15,8 @@ $(() => {
     };
 
     const game = new Phaser.Game(phaser_config);
-    game.scene.start('login');
+    game.scene.start('game'); // Begin preloading actual game assets (HACK)
+    game.scene.switch('game', 'login');
 
 
     // ------------------------------------------------------------------------
@@ -30,6 +31,12 @@ $(() => {
         //     player is on. If our player is a new player, the server will
         //     set us up at a starting area
         socket.emit('request present level');
+    });
+
+    // Server has sent us the data for the level we are one
+    socket.on('present level', (level) => {
+        // Forward the data to the Game scene to render the level
+        game.scene.getScene('game').setLevel(level);
     });
 
 
