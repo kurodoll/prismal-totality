@@ -62,6 +62,9 @@ def disconnect(sid):
     clients[sid]['online'] = False
     clients[sid]['logged in'] = False
 
+    manager.removePlayer(sid)
+    manager.emitUpdates(sio)
+
 # A user has logged in
 @sio.on('login')
 def login(sid, username):
@@ -83,6 +86,12 @@ def request_present_level(sid):
     level = manager.getPresentLevel(sid)
 
     if level:
+        # Remove inactive entities first
+        for e in level['entities'][:]:
+            if not e['active']:
+                level['entities'].remove(e)
+
+        # Send the level to the client
         sio.emit('present level', level)
         manager.linkPlayerToLevel(sid, level['id'])
 

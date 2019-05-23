@@ -52,6 +52,13 @@ class Manager:
         present_level['entities'].append(
             self.EntityManager.getEntity(player_entity))
 
+    def removePlayer(self, sid):
+        if sid in self.players.keys():
+            ent = self.EntityManager.getEntity(self.players[sid]['entity'])
+
+            ent['active'] = False
+            ent['updated'] = True
+
     # Given a player's SID, returns the level that they're on
     def getPresentLevel(self, sid):
         if sid in self.players.keys():

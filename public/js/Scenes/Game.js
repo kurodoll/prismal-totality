@@ -98,7 +98,18 @@ class SceneGame extends Phaser.Scene {
     updateEntities(updates) {
         for (let i = 0; i < updates.length; i++) {
             for (let j = 0; j < this.level.entities.length; j++) {
+                if (!this.level.entities[j]) {
+                    continue;
+                }
+
                 if (updates[i].id == this.level.entities[j].id) {
+                    // If the entity has been marked inactive, we'll delete it
+                    //     a bit later
+                    if (!updates[i].active) {
+                        this.level.entities[j].active = false;
+                        break;
+                    }
+
                     // Update data individually, so that data that has been
                     //     added locally isn't wiped away
                     this.level.entities[j].components = updates[i].components;
@@ -120,6 +131,21 @@ class SceneGame extends Phaser.Scene {
 
                     break;
                 }
+            }
+        }
+
+        // Now remove no longer active entities entirely
+        for (let i = this.level.entities.length - 1; i >= 0; i--) {
+            if (!this.level.entities[i]) {
+                continue;
+            }
+
+            if (!this.level.entities[i].active) {
+                if (this.level.entities[i].image) {
+                    this.level.entities[i].image.destroy();
+                }
+
+                delete this.level.entities[i];
             }
         }
     }

@@ -9,6 +9,7 @@ class EntityManager:
 
         self.entities[ent_id] = {
             'id': ent_id,
+            'active': True,
             'components': {},
             'updated': False  # Whether entity data has changed and needs to be
                               #     sent to concerned players
