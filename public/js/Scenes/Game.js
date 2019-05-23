@@ -8,6 +8,8 @@ class SceneGame extends Phaser.Scene {
     preload() {
         this.load.image('tileset test', '/graphics/tilesets/test');
         this.load.json('tileset test data', '/data/tilesets/test');
+
+        this.load.image('player', '/graphics/sprite/player')
     }
 
     setLevel(level) {
@@ -59,5 +61,21 @@ class SceneGame extends Phaser.Scene {
         );
 
         this.cameras.main.setZoom(level.level.camera_zoom);
+
+        // Now handle the entities present on the level
+        for (let i = 0; i < level.entities.length; i++) {
+            if ('sprite' in level.entities[i].components) {
+                const pos_x
+                    = this.level.entities[i].components.position.x
+                    * this.level.level.tile_width;
+
+                const pos_y
+                    = this.level.entities[i].components.position.y
+                    * this.level.level.tile_height;
+
+                this.level.entities[i].components.sprite.image =
+                    this.add.sprite(pos_x, pos_y, 'player').setOrigin(0, 0);
+            }
+        }
     }
 }

@@ -37,5 +37,10 @@
     "/data/tilesets/test": {
         "content_type": "text/json",
         "filename": "Game/data/tilesets/test.json"
+    },
+
+    "/graphics/sprite/player": {
+        "content_type": "image/png",
+        "filename": "public/graphics/sprites/player.png"
     }
 }
