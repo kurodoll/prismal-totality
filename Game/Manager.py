@@ -11,6 +11,7 @@ class Manager:
         self.EntityManager = EntityManager.EntityManager()
 
         self.players = {}
+        self.links = {}  # Links from levels to players to be updated
 
     def addPlayer(self, sid, username):
         # Create an entity for the player
@@ -76,4 +77,60 @@ class Manager:
 
     # "Links" a player to a level, meaning they will be sent any updates
     def linkPlayerToLevel(self, sid, level_id):
-        pass
+        if level_id in self.links.keys():
+            if sid not in self.links[level_id]:
+                self.links[level_id].append(sid)
+        else:
+            self.links[level_id] = [sid]
+
+    # Handles a user action
+    def action(self, sid, action_type, details):
+        if action_type == 'move':
+            if sid in self.players.keys():
+                ent = self.EntityManager.getEntity(self.players[sid]['entity'])
+                pos = ent['components']['position']
+
+                if 'dir' in details.keys() and details['dir'] == '1':
+                    pos['x'] -= 1
+                    pos['y'] += 1
+                elif 'dir' in details.keys() and details['dir'] == '2':
+                    pos['y'] += 1
+                elif 'dir' in details.keys() and details['dir'] == '3':
+                    pos['x'] += 1
+                    pos['y'] += 1
+                elif 'dir' in details.keys() and details['dir'] == '4':
+                    pos['x'] -= 1
+                elif 'dir' in details.keys() and details['dir'] == '6':
+                    pos['x'] += 1
+                elif 'dir' in details.keys() and details['dir'] == '7':
+                    pos['x'] -= 1
+                    pos['y'] -= 1
+                elif 'dir' in details.keys() and details['dir'] == '8':
+                    pos['y'] -= 1
+                elif 'dir' in details.keys() and details['dir'] == '9':
+                    pos['x'] += 1
+                    pos['y'] -= 1
+
+                # Mark the entity as updated, so that it will be sent to users
+                ent['updated'] = True
+
+    # Checks for updated (changed) entities, and sends the updated data to
+    #     relevant players (usually players on the same level)
+    def emitUpdates(self, sio):
+        to_reset = []  # Entities that need their "updated" status reset
+
+        for l in self.links.keys():
+            for p in self.links[l]:
+                entity_updates = []
+                present_level = self.getPresentLevel(p)
+
+                if 'entities' in present_level.keys():
+                    for e in present_level['entities']:
+                        if e['updated']:
+                            entity_updates.append(e)
+                            to_reset.append(e)
+
+                sio.emit('entity updates', entity_updates, room=p)
+
+        for e in to_reset:
+            e['updated'] = False

@@ -92,6 +92,14 @@ def request_present_level(sid):
             'debug'
         )
 
+# Handles a user action
+@sio.on('action')
+def action(sid, action_type, details):
+    manager.action(sid, action_type, details)
+
+    # Emit any changes that the action might have caused
+    manager.emitUpdates(sio)
+
 
 # -----------------------------------------------------------------------------
 #                                                                          Main

@@ -12,6 +12,21 @@ class SceneGame extends Phaser.Scene {
         this.load.image('player', '/graphics/sprite/player')
     }
 
+    create() {
+        // Set up inputs
+        const movement_keys = [ '1', '2', '3', '4', '6', '7', '8', '9' ];
+
+        this.input.keyboard.on('keydown', (e) => {
+            if (movement_keys.indexOf(e.key) > -1) {
+                socket.emit(
+                    'action',
+                    'move',
+                    { 'dir': e.key }
+                );
+            }
+        });
+    }
+
     setLevel(level) {
         this.level = level;
 
@@ -73,8 +88,38 @@ class SceneGame extends Phaser.Scene {
                     = this.level.entities[i].components.position.y
                     * this.level.level.tile_height;
 
-                this.level.entities[i].components.sprite.image =
+                this.level.entities[i].image =
                     this.add.sprite(pos_x, pos_y, 'player').setOrigin(0, 0);
+            }
+        }
+    }
+
+    // Given updated entity data, updates those entities locally
+    updateEntities(updates) {
+        for (let i = 0; i < updates.length; i++) {
+            for (let j = 0; j < this.level.entities.length; j++) {
+                if (updates[i].id == this.level.entities[j].id) {
+                    // Update data individually, so that data that has been
+                    //     added locally isn't wiped away
+                    this.level.entities[j].components = updates[i].components;
+
+                    // If this entity has an image (sprite), it needs to be
+                    //     updated to reflect the data changes
+                    if (this.level.entities[j].image) {
+                        const pos_x
+                            = this.level.entities[j].components.position.x
+                            * this.level.level.tile_width;
+
+                        const pos_y
+                            = this.level.entities[j].components.position.y
+                            * this.level.level.tile_height;
+
+                        this.level.entities[j].image.x = pos_x;
+                        this.level.entities[j].image.y = pos_y;
+                    }
+
+                    break;
+                }
             }
         }
     }

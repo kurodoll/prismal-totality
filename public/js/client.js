@@ -39,6 +39,11 @@ $(() => {
         game.scene.getScene('game').setLevel(level);
     });
 
+    // The server has sent updated entity data
+    socket.on('entity updates', (updates) => {
+        game.scene.getScene('game').updateEntities(updates);
+    });
+
 
     // ------------------------------------------------------------------------
     //                                                     jQuery Browser Stuff
