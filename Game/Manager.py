@@ -59,6 +59,12 @@ class Manager:
             ent['active'] = False
             ent['updated'] = True
 
+            log(
+                'Manager',
+                f'Player removed (entity #{self.players[sid]["entity"]})',
+                'debug'
+            )
+
     # Given a player's SID, returns the level that they're on
     def getPresentLevel(self, sid):
         if sid in self.players.keys():

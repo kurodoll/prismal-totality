@@ -1,3 +1,6 @@
+from log import log
+
+
 class EntityManager:
     def __init__(self):
         self.id = 0
@@ -16,6 +19,7 @@ class EntityManager:
                              #     so that new entities get sent out
         }
 
+        log('EntityManager', f'New entity added #{ent_id}', 'debug')
         return ent_id
 
     def addComponent(self, entity_id, component_type, component_data):
