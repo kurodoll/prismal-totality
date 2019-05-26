@@ -23,6 +23,13 @@ class WorldManager:
                 'warning'
             )
 
+        # Define tiles that can be moved on
+        self.valid_movements = [
+            'ground',
+            'grass',
+            'stairs down'
+        ]
+
     # Returns the ID of the default level (where new players will start)
     def defaultLevel(self):
         return 'test'
@@ -82,7 +89,7 @@ class WorldManager:
 
         tile = self.levels[level_id]['level']['tiles'][y * w + x]
 
-        if tile == 'ground':
+        if tile in self.valid_movements:
             return {
                 'success': True,
             }

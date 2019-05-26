@@ -8,6 +8,8 @@ class SceneGame extends Phaser.Scene {
     preload() {
         this.load.image('tileset test', '/graphics/tilesets/test');
         this.load.json('tileset test data', '/data/tilesets/test');
+        this.load.image('tileset cave', '/graphics/tilesets/cave');
+        this.load.json('tileset cave data', '/data/tilesets/cave');
 
         this.load.image('player', '/graphics/sprite/player')
     }
@@ -17,11 +19,21 @@ class SceneGame extends Phaser.Scene {
         const movement_keys = [ '1', '2', '3', '4', '6', '7', '8', '9' ];
 
         this.input.keyboard.on('keydown', (e) => {
+            // Movement
             if (movement_keys.indexOf(e.key) > -1) {
                 socket.emit(
                     'action',
                     'move',
                     { 'dir': e.key }
+                );
+            }
+
+            // Stair interaction
+            if (e.key == '>') {
+                socket.emit(
+                    'action',
+                    'stairs down',
+                    {}
                 );
             }
         });
@@ -83,6 +95,10 @@ class SceneGame extends Phaser.Scene {
 
     // Finds sprites in entities and renders them
     renderSprites() {
+        if (!this.level.entities) {
+            return;
+        }
+
         for (let i = 0; i < this.level.entities.length; i++) {
             if ('sprite' in this.level.entities[i].components) {
                 const pos_x
@@ -108,6 +124,10 @@ class SceneGame extends Phaser.Scene {
 
     // Given updated entity data, updates those entities locally
     updateEntities(updates) {
+        if (!this.level.entities) {
+            return;
+        }
+
         for (let i = 0; i < updates.length; i++) {
             let match_found = false;
 
@@ -144,6 +164,26 @@ class SceneGame extends Phaser.Scene {
                 }
 
                 this.level.entities.splice(i, 1);
+            }
+        }
+
+        // Update the image itself for sprite entities
+        this.renderSprites();
+    }
+
+    destroyEntity(entity) {
+        if (!this.level.entities) {
+            return;
+        }
+
+        for (let i = 0; i < this.level.entities.length; i++) {
+            if (entity == this.level.entities[i].id) {
+                if (this.level.entities[i].image) {
+                    this.level.entities[i].image.destroy();
+                }
+
+                this.level.entities.splice(i, 1);
+                break;
             }
         }
 

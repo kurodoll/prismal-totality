@@ -22,6 +22,9 @@ class EntityManager:
         log('EntityManager', f'New entity added #{ent_id}', 'debug')
         return ent_id
 
+    def replace(self, ent_id, entity):
+        self.entities[ent_id] = entity
+
     def addComponent(self, entity_id, component_type, component_data):
         self.entities[entity_id]['components'][component_type] = component_data
 

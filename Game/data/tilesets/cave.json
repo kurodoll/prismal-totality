@@ -2,5 +2,6 @@
     "ground": 0,
     "wall": 1,
     "stairs down": 2,
-    "empty": 3
+    "empty": 3,
+    "grass": 4
 }

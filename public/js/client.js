@@ -38,15 +38,25 @@ $(() => {
         game.scene.getScene('gui').message(msg);
     });
 
-    // Server has sent us the data for the level we are one
+    // Server has sent us the data for the level we are on
     socket.on('present level', (level) => {
         // Forward the data to the Game scene to render the level
         game.scene.getScene('game').setLevel(level);
     });
 
+    // The server is telling us that we've changed level
+    socket.on('level change', () => {
+        socket.emit('request present level');
+    });
+
     // The server has sent updated entity data
     socket.on('entity updates', (updates) => {
         game.scene.getScene('game').updateEntities(updates);
+    });
+
+    // The server wants us to destroy an entity
+    socket.on('destroy entity', (entity) => {
+        game.scene.getScene('game').destroyEntity(entity);
     });
 
 

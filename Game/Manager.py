@@ -13,6 +13,9 @@ class Manager:
         self.players = {}
         self.links = {}  # Links from levels to players to be updated
 
+        # A list of entity IDs that clients need to destroy
+        self.entities_to_destroy = []
+
     def addPlayer(self, sid, username):
         # Create an entity for the player
         player_entity = self.EntityManager.addNew()
@@ -42,6 +45,14 @@ class Manager:
             {
                 'x': present_level['elements']['spawn']['x'],
                 'y': present_level['elements']['spawn']['y']
+            }
+        )
+
+        self.EntityManager.addComponent(
+            player_entity,
+            'sid',
+            {
+                'sid': sid
             }
         )
 
@@ -96,6 +107,11 @@ class Manager:
         else:
             self.links[level_id] = [sid]
 
+    def unlinkPlayerFromLevel(self, sid, level_id):
+        if level_id in self.links.keys():
+            if sid in self.links[level_id]:
+                self.links[level_id].remove(sid)
+
     # Handles a user action
     def action(self, sid, action_type, details):
         if action_type == 'move':
@@ -145,9 +161,80 @@ class Manager:
                         'data': response['message']
                     }
 
+        # If a user goes down some stairs, we have to change their level
+        elif action_type == 'stairs down':
+            if sid in self.players.keys():
+                on_level = self.players[sid]['on level']
+                level = self.WorldManager.getLevel(on_level)
+
+                if 'stairs down' in level['elements']:
+                    player_entity = None
+
+                    # Remove the player's entity from its current level
+                    for i in range(0, len(level['entities'])):
+                        if 'sid' in level['entities'][i]['components']:
+                            if level['entities'][i]['components']['sid']['sid'] == sid:  # noqa
+                                self.entities_to_destroy.append(
+                                    {
+                                        'level': on_level,
+                                        'id': level['entities'][i]['id']
+                                    }
+                                )
+
+                                player_entity = level['entities'].pop(i)
+                                self.unlinkPlayerFromLevel(sid, on_level)
+
+                                break
+
+                    # Set the player to be on the new level
+                    target = level['elements']['stairs down']['target']
+                    self.players[sid]['on level'] = target
+
+                    # Load the level if it hasn't been already
+                    if not self.WorldManager.levelLoaded(target):
+                        self.WorldManager.loadLevel(target)
+
+                    target_level = self.WorldManager.getLevel(target)
+
+                    # Set up the player's entity to be on the new level
+                    spawn_x = target_level['elements']['spawn']['x']
+                    spawn_y = target_level['elements']['spawn']['y']
+
+                    player_entity['components']['position']['x'] = spawn_x
+                    player_entity['components']['position']['y'] = spawn_y
+                    player_entity['updated'] = True
+
+                    # Put the player entity into the data of the new level
+                    if 'entities' not in target_level.keys():
+                        target_level['entities'] = []
+
+                    target_level['entities'].append(player_entity)
+
+                    # Since the old player entity was removed, we also need to
+                    #     update the entry in the entity manager
+                    self.EntityManager.replace(
+                        player_entity['id'],
+                        player_entity
+                    )
+
+                    return {
+                        'response': 'level change',
+                        'data': target
+                    }
+
     # Checks for updated (changed) entities, and sends the updated data to
     #     relevant players (usually players on the same level)
     def emitUpdates(self, sio):
+        # First emit entities that need to be destroyed
+        for e in self.entities_to_destroy:
+            log('Manager', f'Destroy entity {e["id"]}', 'debug')
+
+            for p in self.links[e['level']]:
+                sio.emit('destroy entity', e['id'], room=p)
+
+        self.entities_to_destroy = []
+
+        # Then emit updates
         to_reset = []  # Entities that need their "updated" status reset
 
         for l in self.links.keys():

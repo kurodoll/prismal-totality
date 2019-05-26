@@ -34,9 +34,17 @@
         "content_type": "image/png",
         "filename": "public/graphics/tilesets/test.png"
     },
+    "/graphics/tilesets/cave": {
+        "content_type": "image/png",
+        "filename": "public/graphics/tilesets/cave.png"
+    },
     "/data/tilesets/test": {
         "content_type": "text/json",
         "filename": "Game/data/tilesets/test.json"
+    },
+    "/data/tilesets/cave": {
+        "content_type": "text/json",
+        "filename": "Game/data/tilesets/cave.json"
     },
 
     "/graphics/sprite/player": {

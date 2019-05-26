@@ -16,7 +16,7 @@
             "wall", "ground", "ground", "ground", "ground", "ground", "ground", "ground", "ground", "wall",
             "wall", "ground", "ground", "ground", "ground", "ground", "ground", "ground", "ground", "wall",
             "wall", "ground", "ground", "ground", "ground", "ground", "ground", "ground", "ground", "wall",
-            "wall", "ground", "ground", "ground", "ground", "ground", "ground", "ground", "ground", "wall",
+            "wall", "ground", "ground", "ground", "ground", "ground", "ground", "stairs down", "ground", "wall",
             "wall", "ground", "ground", "ground", "ground", "ground", "ground", "ground", "ground", "wall",
             "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall"
         ]
@@ -25,6 +25,9 @@
         "spawn": {
             "x": 2,
             "y": 2
+        },
+        "stairs down": {
+            "target": "beginner dungeon 1"
         }
     }
 }

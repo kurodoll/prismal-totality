@@ -109,9 +109,10 @@ def request_present_level(sid):
 
     if level:
         # Remove inactive entities first
-        for e in level['entities'][:]:
-            if not e['active']:
-                level['entities'].remove(e)
+        if 'entities' in level.keys():
+            for e in level['entities'][:]:
+                if not e['active']:
+                    level['entities'].remove(e)
 
         # Send the level to the client
         sio.emit('present level', level, room=sid)
@@ -131,6 +132,15 @@ def action(sid, action_type, details):
     if response:
         if response['response'] == 'message':
             sio.emit('msg', response['data'], room=sid)
+
+        elif response['response'] == 'level change':
+            sio.emit('level change', room=sid)
+
+            log(
+                'server.py',
+                f'User {clients[sid]["username"]} -> Level {response["data"]}',
+                'debug'
+            )
 
     # Emit any changes that the action might have caused
     manager.emitUpdates(sio)
