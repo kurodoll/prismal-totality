@@ -1,4 +1,5 @@
 {
     "test": "Game/data/levels/test.json",
-    "beginner dungeon 1": "Game/data/levels/bd1.json"
+    "beginner dungeon 1": "Game/data/levels/bd1.json",
+    "beginner dungeon 2": "Game/data/levels/bd2.json"
 }

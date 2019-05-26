@@ -1,6 +1,6 @@
 {
-    "id": "beginner dungeon 1",
-    "title": "Beginner Dungeon - Floor #1",
+    "id": "beginner dungeon 2",
+    "title": "Beginner Dungeon - Floor #2",
     "level": {
         "width": 20,
         "height": 20,
@@ -16,28 +16,36 @@
             "empty", "empty", "empty", "empty", "empty", "wall", "ground", "ground", "ground", "ground", "ground", "ground", "ground", "ground", "wall", "empty", "empty", "empty", "empty", "empty",
             "empty", "empty", "empty", "empty", "empty", "wall", "ground", "ground", "ground", "ground", "ground", "ground", "ground", "ground", "wall", "empty", "empty", "empty", "empty", "empty",
             "empty", "empty", "empty", "empty", "empty", "wall", "ground", "ground", "ground", "ground", "ground", "ground", "ground", "ground", "wall", "empty", "empty", "empty", "empty", "empty",
-            "empty", "empty", "empty", "empty", "empty", "wall", "ground", "tall grass", "ground", "ground", "ground", "ground", "ground", "ground", "wall", "empty", "empty", "empty", "empty", "empty",
-            "empty", "empty", "empty", "empty", "empty", "wall", "ground", "tall grass", "ground", "ground", "ground", "tall grass", "ground", "ground", "wall", "empty", "empty", "empty", "empty", "empty",
-            "empty", "empty", "empty", "empty", "empty", "wall", "ground", "ground", "ground", "tall grass", "tall grass", "ground", "ground", "ground", "wall", "empty", "empty", "empty", "empty", "empty",
-            "empty", "empty", "empty", "empty", "empty", "wall", "ground", "ground", "ground", "tall grass", "tall grass", "ground", "ground", "ground", "wall", "empty", "empty", "empty", "empty", "empty",
-            "empty", "empty", "empty", "empty", "empty", "wall", "ground", "ground", "ground", "ground", "tall grass", "ground", "ground", "ground", "wall", "empty", "empty", "empty", "empty", "empty",
+            "empty", "empty", "empty", "empty", "empty", "wall", "ground", "ground", "ground", "ground", "ground", "ground", "ground", "ground", "wall", "empty", "empty", "empty", "empty", "empty",
+            "empty", "empty", "empty", "empty", "empty", "wall", "ground", "ground", "ground", "ground", "ground", "ground", "ground", "ground", "wall", "empty", "empty", "empty", "empty", "empty",
+            "empty", "empty", "empty", "empty", "empty", "wall", "ground", "ground", "ground", "ground", "ground", "ground", "ground", "ground", "wall", "empty", "empty", "empty", "empty", "empty",
+            "empty", "empty", "empty", "empty", "empty", "wall", "ground", "ground", "ground", "ground", "ground", "ground", "ground", "ground", "wall", "empty", "empty", "empty", "empty", "empty",
+            "empty", "empty", "empty", "empty", "empty", "wall", "ground", "ground", "ground", "ground", "ground", "ground", "ground", "ground", "wall", "empty", "empty", "empty", "empty", "empty",
             "empty", "empty", "empty", "empty", "empty", "wall", "ground", "ground", "ground", "ground", "ground", "ground", "ground", "ground", "wall", "empty", "empty", "empty", "empty", "empty",
             "empty", "empty", "empty", "empty", "empty", "wall", "ground", "ground", "ground", "ground", "ground", "ground", "ground", "ground", "wall", "empty", "empty", "empty", "empty", "empty",
             "empty", "empty", "empty", "empty", "empty", "wall", "ground", "ground", "ground", "ground", "ground", "ground", "ground", "ground", "wall", "empty", "empty", "empty", "empty", "empty",
             "empty", "empty", "empty", "empty", "empty", "wall", "ground", "ground", "ground", "ground", "ground", "ground", "ground", "ground", "wall", "empty", "empty", "empty", "empty", "empty",
             "empty", "empty", "empty", "empty", "empty", "wall", "ground", "ground", "ground", "ground", "ground", "ground", "ground", "ground", "wall", "empty", "empty", "empty", "empty", "empty",
             "empty", "empty", "empty", "empty", "empty", "wall", "ground", "ground", "ground", "ground", "ground", "ground", "ground", "ground", "wall", "wall", "wall", "wall", "wall", "wall",
-            "empty", "empty", "empty", "empty", "empty", "wall", "ground", "ground", "ground", "ground", "ground", "ground", "ground", "ground", "ground", "ground", "ground", "ground", "stairs down", "wall",
+            "empty", "empty", "empty", "empty", "empty", "wall", "ground", "ground", "ground", "ground", "ground", "ground", "ground", "ground", "ground", "ground", "ground", "ground", "ground", "wall",
             "empty", "empty", "empty", "empty", "empty", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall"
         ]
     },
     "elements": {
         "spawn": {
-            "x": 1,
-            "y": 1
-        },
-        "stairs down": {
-            "target": "beginner dungeon 2"
+            "x": 18,
+            "y": 18
         }
-    }
+    },
+    "entities": [
+        {
+            "type": "monsters.floating paper",
+            "components": {
+                "position": {
+                    "x": 10,
+                    "y": 10
+                }
+            }
+        }
+    ]
 }

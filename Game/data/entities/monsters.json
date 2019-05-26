@@ -1,0 +1,9 @@
+{
+    "floating paper": {
+        "components": {
+            "sprite": {
+                "sprite": "floating paper"
+            }
+        }
+    }
+}

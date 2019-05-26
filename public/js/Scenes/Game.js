@@ -12,6 +12,7 @@ class SceneGame extends Phaser.Scene {
         this.load.json('tileset cave data', '/data/tilesets/cave');
 
         this.load.image('player', '/graphics/sprite/player')
+        this.load.image('floating paper', '/graphics/sprite/floating paper')
     }
 
     create() {
@@ -116,7 +117,11 @@ class SceneGame extends Phaser.Scene {
                     this.level.entities[i].image.y = pos_y;
                 } else {
                     this.level.entities[i].image =
-                        this.add.sprite(pos_x, pos_y, 'player').setOrigin(0, 0);
+                        this.add.sprite(
+                            pos_x,
+                            pos_y,
+                            this.level.entities[i].components.sprite.sprite
+                        ).setOrigin(0, 0);
                 }
             }
         }

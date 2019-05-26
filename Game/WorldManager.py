@@ -35,7 +35,7 @@ class WorldManager:
         return 'test'
 
     # Loads a level into memory. Returns True on success
-    def loadLevel(self, level_id):
+    def loadLevel(self, level_id, entity_manager):
         log('WorldManager', 'Loading level ' + level_id, 'debug')
 
         if level_id in self.defined_levels.keys():
@@ -60,6 +60,9 @@ class WorldManager:
 
             self.levels[level_id] = level_data
             log('WorldManager', f'Loaded level {level_id}')
+
+            # Set up extra entity data
+            entity_manager.loadEntities(level_data)
 
             return True
 

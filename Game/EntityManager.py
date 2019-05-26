@@ -1,10 +1,18 @@
 from log import log
+import json
 
 
 class EntityManager:
     def __init__(self):
         self.id = 0
         self.entities = {}
+
+        # Load pre-defined entities
+        self.entity_types = {
+            "monsters": json.load(
+                open('Game/data/entities/monsters.json', 'r')
+            )
+        }
 
     def addNew(self):
         ent_id = self.id
@@ -30,3 +38,18 @@ class EntityManager:
 
     def getEntity(self, entity_id):
         return self.entities[entity_id]
+
+    def loadEntities(self, level):
+        if 'entities' in level.keys():
+            for e in level['entities']:
+                e['active'] = True
+                e['updated'] = False
+
+                # Load entity data from pre-defined entity types
+                if 'type' in e.keys():
+                    a = e['type'].split('.')[0]
+                    b = e['type'].split('.')[1]
+
+                    e['components'].update(
+                        self.entity_types[a][b]['components']
+                    )

@@ -50,5 +50,9 @@
     "/graphics/sprite/player": {
         "content_type": "image/png",
         "filename": "public/graphics/sprites/player.png"
+    },
+    "/graphics/sprite/floating paper": {
+        "content_type": "image/png",
+        "filename": "public/graphics/sprites/floating_paper.png"
     }
 }

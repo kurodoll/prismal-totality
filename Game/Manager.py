@@ -93,7 +93,7 @@ class Manager:
                     'debug'
                 )
 
-                if self.WorldManager.loadLevel(on_level):
+                if self.WorldManager.loadLevel(on_level, self.EntityManager):
                     return self.WorldManager.getLevel(on_level)
         else:
             # If the player isn't known, it's a warning
@@ -198,7 +198,7 @@ class Manager:
 
                     # Load the level if it hasn't been already
                     if not self.WorldManager.levelLoaded(target):
-                        self.WorldManager.loadLevel(target)
+                        self.WorldManager.loadLevel(target, self.EntityManager)
 
                     target_level = self.WorldManager.getLevel(target)
 
