@@ -152,6 +152,12 @@ class Manager:
                     # Mark the entity as updated, so that it will be sent to
                     #     users
                     ent['updated'] = True
+
+                    if response['message']:
+                        return {
+                            'response': 'message',
+                            'data': response['message']
+                        }
                 else:
                     pos['x'] = old_x
                     pos['y'] = old_y

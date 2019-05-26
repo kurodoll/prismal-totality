@@ -90,8 +90,14 @@ class WorldManager:
         tile = self.levels[level_id]['level']['tiles'][y * w + x]
 
         if tile in self.valid_movements:
+            message = None
+
+            if tile == 'grass':
+                message = 'You rustle through the tall grass'
+
             return {
                 'success': True,
+                'message': message
             }
         elif tile == 'wall':
             return {

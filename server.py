@@ -116,6 +116,8 @@ def request_present_level(sid):
 
         # Send the level to the client
         sio.emit('present level', level, room=sid)
+        sio.emit('msg', 'Moved to level ' + level['title'], room=sid)
+
         manager.linkPlayerToLevel(sid, level['id'])
 
         log(
