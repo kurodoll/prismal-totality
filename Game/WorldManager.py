@@ -26,7 +26,7 @@ class WorldManager:
         # Define tiles that can be moved on
         self.valid_movements = [
             'ground',
-            'grass',
+            'tall grass',
             'stairs down'
         ]
 
@@ -92,7 +92,7 @@ class WorldManager:
         if tile in self.valid_movements:
             message = None
 
-            if tile == 'grass':
+            if tile == 'tall grass':
                 message = 'You rustle through the tall grass'
 
             return {
