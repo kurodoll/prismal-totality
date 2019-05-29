@@ -1,6 +1,7 @@
 {
     "floating paper": {
         "components": {
+            "name": "Floating Paper",
             "sprite": {
                 "sprite": "floating paper"
             }

@@ -2,6 +2,7 @@ from log import log
 
 from . import WorldManager
 from . import EntityManager
+from . import CombatManager
 
 
 # Manages the entire game world
@@ -9,6 +10,7 @@ class Manager:
     def __init__(self):
         self.WorldManager = WorldManager.WorldManager()
         self.EntityManager = EntityManager.EntityManager()
+        self.CombatManager = CombatManager.CombatManager()
 
         self.players = {}
         self.links = {}  # Links from levels to players to be updated
@@ -119,8 +121,8 @@ class Manager:
                 ent = self.EntityManager.getEntity(self.players[sid]['entity'])
                 pos = ent['components']['position']
 
-                old_x = pos['x']
-                old_y = pos['y']
+                old_x = int(pos['x'])
+                old_y = int(pos['y'])
 
                 if 'dir' in details.keys() and details['dir'] == '1':
                     pos['x'] -= 1
@@ -159,6 +161,10 @@ class Manager:
                             'data': response['message']
                         }
                 else:
+                    # Player attacked a monster
+                    if response['message'] == 'monster':
+                        response['message'] = self.CombatManager.attack(ent, response['data'])  # noqa
+
                     pos['x'] = old_x
                     pos['y'] = old_y
 

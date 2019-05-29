@@ -98,6 +98,18 @@ class WorldManager:
             if tile == 'tall grass':
                 message = 'You rustle through the tall grass'
 
+            # Check for entities on the tile
+            for e in self.levels[level_id]['entities']:
+                if 'position' in e['components']:
+                    if e['components']['position']['x'] == x and e['components']['position']['y'] == y:  # noqa
+                        if 'type' in e and e['type'].split('.')[0] == 'monsters':  # noqa
+                            # Attacked a monster
+                            return {
+                                'success': False,
+                                'message': 'monster',
+                                'data': e
+                            }
+
             return {
                 'success': True,
                 'message': message
