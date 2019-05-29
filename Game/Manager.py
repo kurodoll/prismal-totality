@@ -58,6 +58,15 @@ class Manager:
             }
         )
 
+        self.EntityManager.addComponent(
+            player_entity,
+            'stats',
+            {
+                'health': 10,
+                'strength': 5
+            }
+        )
+
         # Add the player's entity to the level they're on
         if 'entities' not in present_level.keys():
             present_level['entities'] = []

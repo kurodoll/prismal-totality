@@ -100,6 +100,9 @@ class WorldManager:
 
             # Check for entities on the tile
             for e in self.levels[level_id]['entities']:
+                if not e['active']:
+                    continue
+
                 if 'position' in e['components']:
                     if e['components']['position']['x'] == x and e['components']['position']['y'] == y:  # noqa
                         if 'type' in e and e['type'].split('.')[0] == 'monsters':  # noqa

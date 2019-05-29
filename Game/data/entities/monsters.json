@@ -4,6 +4,9 @@
             "name": "Floating Paper",
             "sprite": {
                 "sprite": "floating paper"
+            },
+            "stats": {
+                "health": 5
             }
         }
     }
