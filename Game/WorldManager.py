@@ -127,10 +127,8 @@ class WorldManager:
                         else:
                             cur_y -= 1
 
-                    if cur_x < 0 or cur_x >= level['level']['width']:
+                    if cur_x < 0 or cur_x >= level['level']['width'] or cur_y < 0 or cur_y >= level['level']['height']:  # noqa
                         cur_x = int(level['level']['width'] / 2)
-
-                    if cur_y < 0 or cur_y >= level['level']['height']:
                         cur_y = int(level['level']['height'] / 2)
 
                     if level['level']['tiles'][cur_y * level['level']['width'] + cur_x] == 'empty':  # noqa
