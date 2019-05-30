@@ -30,6 +30,17 @@ class EntityManager:
         log('EntityManager', f'New entity added #{ent_id}', 'debug')
         return ent_id
 
+    def addExistingEntity(self, entity):
+        ent_id = self.id
+        self.id += 1
+
+        entity['id'] = ent_id
+        entity['active'] = True
+        entity['updated'] = True
+
+        self.entities[ent_id] = entity
+        log('EntityManager', f'Existing entity added #{ent_id}', 'debug')
+
     def replace(self, ent_id, entity):
         self.entities[ent_id] = entity
 
@@ -39,17 +50,27 @@ class EntityManager:
     def getEntity(self, entity_id):
         return self.entities[entity_id]
 
+    def loadEntity(self, e):
+        self.addExistingEntity(e)
+
+        # Load entity data from pre-defined entity types
+        if 'type' in e.keys():
+            a = e['type'].split('.')[0]
+            b = e['type'].split('.')[1]
+
+            e['components'].update(
+                self.entity_types[a][b]['components']
+            )
+
     def loadEntities(self, level):
         if 'entities' in level.keys():
             for e in level['entities']:
-                e['active'] = True
-                e['updated'] = False
+                self.loadEntity(e)
 
-                # Load entity data from pre-defined entity types
-                if 'type' in e.keys():
-                    a = e['type'].split('.')[0]
-                    b = e['type'].split('.')[1]
-
-                    e['components'].update(
-                        self.entity_types[a][b]['components']
-                    )
+    # Like loadEntities, but only handles entities with a certain flag
+    def loadNewEntities(self, level):
+        if 'entities' in level.keys():
+            for e in level['entities']:
+                if 'new' in e.keys() and e['new']:
+                    self.loadEntity(e)
+                    e['new'] = False

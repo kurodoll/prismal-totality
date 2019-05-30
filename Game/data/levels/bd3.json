@@ -9,5 +9,11 @@
         "camera_zoom": 2,
         "tileset": "cave",
         "generator": "cave"
-    }
+    },
+    "monsters": [
+        {
+            "type": "floating paper (strange)",
+            "max_n": 5
+        }
+    ]
 }

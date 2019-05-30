@@ -202,3 +202,60 @@ class WorldManager:
             'success': False,
             'message': 'You cannot move there'
         }
+
+    # Finds a random valid spawn location in a level
+    def getRandomSpawn(self, level):
+        valid_tiles = []
+
+        for x in range(0, level['level']['width'] - 1):
+            for y in range(0, level['level']['height'] - 1):
+                try:
+                    for e in level['entities']:
+                        if e['components']['position']['x'] == x and e['components']['position']['y'] == y:  # noqa
+                            continue
+                except KeyError:
+                    pass
+
+                if level['level']['tiles'][(y * level['level']['width'] + x)] in self.valid_movements:  # noqa
+                    valid_tiles.append({
+                        'x': x,
+                        'y': y
+                    })
+
+        return_index = random.randint(0, len(valid_tiles) - 1)
+        return valid_tiles[return_index]
+
+    # Spawn monsters in levels where monster levels are depleted
+    def spawnMonsters(self, entity_manager):
+        for level_id in self.levels.keys():
+            l = self.levels[level_id]  # noqa
+
+            if 'monsters' in l.keys():
+                for m in l['monsters']:
+                    current_n = 0
+
+                    if 'entities' in l.keys():
+                        for e in l['entities']:
+                            if ('type' not in e.keys()) or (not e['active']):
+                                continue
+
+                            if e['type'] == ('monsters.' + m['type']):
+                                current_n += 1
+
+                    if current_n < m['max_n']:
+                        e = {}
+
+                        e['type'] = 'monsters.' + m['type']
+                        e['components'] = {
+                            'position': self.getRandomSpawn(l)
+                        }
+                        e['new'] = True
+
+                        l['entities'].append(e)
+                        entity_manager.loadNewEntities(l)
+
+                        log(
+                            'WorldManager',
+                            'Spawned a ' + e['type'] + ' to level ' + l['title'],  # noqa
+                            'debug'
+                        )

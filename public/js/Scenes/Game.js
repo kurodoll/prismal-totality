@@ -130,7 +130,7 @@ class SceneGame extends Phaser.Scene {
     // Given updated entity data, updates those entities locally
     updateEntities(updates) {
         if (!this.level.entities) {
-            return;
+            this.level.entities = updates;
         }
 
         for (let i = 0; i < updates.length; i++) {

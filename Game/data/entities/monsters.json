@@ -9,5 +9,17 @@
                 "health": 5
             }
         }
+    },
+    "floating paper (strange)": {
+        "components": {
+            "name": "Floating Paper (Strange)",
+            "sprite": {
+                "sprite": "floating paper"
+            },
+            "stats": {
+                "health": 5,
+                "strength": 1
+            }
+        }
     }
 }

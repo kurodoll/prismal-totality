@@ -149,6 +149,17 @@ def action(sid, action_type, details):
 
 
 # -----------------------------------------------------------------------------
+#                                                            Management Threads
+# -----------------------------------------------------------------------------
+def updateThread():
+    while True:
+        manager.doUpdates()
+        manager.emitUpdates(sio)
+
+        sio.sleep(1)
+
+
+# -----------------------------------------------------------------------------
 #                                                                          Main
 # -----------------------------------------------------------------------------
 if __name__ == '__main__':
@@ -157,6 +168,9 @@ if __name__ == '__main__':
     # Check whether a port is defined as an envvar (e.g. for Heroku)
     if 'PORT' in os.environ.keys():
         port = int(os.environ['PORT'])
+
+    # Start threads
+    sio.start_background_task(updateThread)
 
     # Actually run the server
     log('server.py', 'Starting server')

@@ -211,6 +211,8 @@ class Manager:
                     target = level['elements']['stairs down']['target']
                     self.players[sid]['on level'] = target
 
+                    self.linkPlayerToLevel(sid, target)
+
                     # Load the level if it hasn't been already
                     if not self.WorldManager.levelLoaded(target):
                         self.WorldManager.loadLevel(target, self.EntityManager)
@@ -248,7 +250,7 @@ class Manager:
     def emitUpdates(self, sio):
         # First emit entities that need to be destroyed
         for e in self.entities_to_destroy:
-            log('Manager', f'Destroy entity {e["id"]}', 'debug')
+            log('Manager', f'Destroy entity {e["id"]} (client-side)', 'debug')
 
             for p in self.links[e['level']]:
                 sio.emit('destroy entity', e['id'], room=p)
@@ -269,7 +271,12 @@ class Manager:
                             entity_updates.append(e)
                             to_reset.append(e)
 
-                sio.emit('entity updates', entity_updates, room=p)
+                if len(entity_updates) > 0:
+                    sio.emit('entity updates', entity_updates, room=p)
 
         for e in to_reset:
             e['updated'] = False
+
+    # Handle all periodic updates to the world
+    def doUpdates(self):
+        self.WorldManager.spawnMonsters(self.EntityManager)
