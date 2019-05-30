@@ -1,5 +1,7 @@
 from log import log
+
 import json
+import random
 
 
 # Manages the levels of the game world
@@ -61,12 +63,85 @@ class WorldManager:
             self.levels[level_id] = level_data
             log('WorldManager', f'Loaded level {level_id}')
 
+            # If the level needs to be generated, generate it
+            if 'generator' in level_data['level'].keys():
+                self.generateLevel(level_data)
+
             # Set up extra entity data
             entity_manager.loadEntities(level_data)
 
             return True
 
         return False
+
+    def generateLevel(self, level):
+        if level['level']['generator'] == 'cave':
+            total_tiles = level['level']['width'] * level['level']['height']
+            fill_tiles = int(total_tiles / 3)  # How many tiles to generate
+
+            # Start in the middle of the level space
+            cur_x = int(level['level']['width'] / 2)
+            cur_y = int(level['level']['height'] / 2)
+
+            # Tiles that are allowed to be generated.
+            # Multiple entries are used as a simple weighting system for now
+            possible_tiles = [
+                'ground',
+                'ground',
+                'tall grass'
+            ]
+
+            # Tiles where a spawn point could be placed
+            spawnable_tiles = []
+
+            # Create an empty level
+            level['level']['tiles'] = []
+            for i in range(0, total_tiles):
+                level['level']['tiles'].append('empty')
+
+            # Randomly create a floor space using a random walk algorithm
+            for i in range(0, fill_tiles):
+                # Choose a tile type to place
+                tile_type = random.randint(0, len(possible_tiles) - 1)
+
+                tile_index = int(cur_y * level['level']['width'] + cur_x)
+                level['level']['tiles'][tile_index] = possible_tiles[tile_type]
+
+                spawnable_tiles.append({
+                    'x': cur_x,
+                    'y': cur_y
+                })
+
+                # Move the "cursor" randomly until a suitable next spot to
+                #     place a tile is found
+                while True:
+                    if random.random() > 0.5:
+                        if random.random() > 0.5:
+                            cur_x += 1
+                        else:
+                            cur_x -= 1
+                    else:
+                        if random.random() > 0.5:
+                            cur_y += 1
+                        else:
+                            cur_y -= 1
+
+                    if cur_x < 0 or cur_x >= level['level']['width']:
+                        cur_x = int(level['level']['width'] / 2)
+
+                    if cur_y < 0 or cur_y >= level['level']['height']:
+                        cur_y = int(level['level']['height'] / 2)
+
+                    if level['level']['tiles'][cur_y * level['level']['width'] + cur_x] == 'empty':  # noqa
+                        break
+
+            # Place a spawn point somewhere random
+            spawn_tile = random.randint(0, len(spawnable_tiles) - 1)
+
+            if 'elements' not in level.keys():
+                level['elements'] = {}
+
+            level['elements']['spawn'] = spawnable_tiles[spawn_tile]
 
     def levelLoaded(self, level_id):
         return level_id in self.levels.keys()

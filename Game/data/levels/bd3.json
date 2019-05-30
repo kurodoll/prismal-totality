@@ -1,0 +1,13 @@
+{
+    "id": "beginner dungeon 3",
+    "title": "Beginner Dungeon - Floor #3",
+    "level": {
+        "width": 20,
+        "height": 20,
+        "tile_width": 15,
+        "tile_height": 15,
+        "camera_zoom": 2,
+        "tileset": "cave",
+        "generator": "cave"
+    }
+}

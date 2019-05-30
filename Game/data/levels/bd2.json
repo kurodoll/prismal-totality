@@ -10,7 +10,7 @@
         "tileset": "cave",
         "tiles": [
             "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "empty", "empty", "empty", "empty", "empty",
-            "wall", "ground", "ground", "ground", "ground", "ground", "ground", "ground", "ground", "ground", "ground", "ground", "ground", "ground", "wall", "empty", "empty", "empty", "empty", "empty",
+            "wall", "stairs down", "ground", "ground", "ground", "ground", "ground", "ground", "ground", "ground", "ground", "ground", "ground", "ground", "wall", "empty", "empty", "empty", "empty", "empty",
             "wall", "wall", "wall", "wall", "wall", "wall", "ground", "ground", "ground", "ground", "ground", "ground", "ground", "ground", "wall", "empty", "empty", "empty", "empty", "empty",
             "empty", "empty", "empty", "empty", "empty", "wall", "ground", "ground", "ground", "ground", "ground", "ground", "ground", "ground", "wall", "empty", "empty", "empty", "empty", "empty",
             "empty", "empty", "empty", "empty", "empty", "wall", "ground", "ground", "ground", "ground", "ground", "ground", "ground", "ground", "wall", "empty", "empty", "empty", "empty", "empty",
@@ -35,6 +35,9 @@
         "spawn": {
             "x": 18,
             "y": 18
+        },
+        "stairs down": {
+            "target": "beginner dungeon 3"
         }
     },
     "entities": [
