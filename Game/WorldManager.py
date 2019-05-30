@@ -297,34 +297,63 @@ class WorldManager:
 
             self.checkForCombat(level_id)
 
-    def checkForCombat(self, level_id):
+    def checkForCombat(self, level_id, entity=None):
         l = self.levels[level_id]  # noqa
 
         if 'entities' in l.keys():
             for e in l['entities']:
+                # If a monster is already in combat, ignore it--unless we're
+                #     given a specific entity to check, since it can take
+                #     the aggro
+                if (not entity) and ('combat' in e.keys()):
+                    if e['combat']['in_combat']:
+                        continue
+
                 try:
                     if 'range' not in e['components'].keys():
                         continue
 
                     if e['active'] and e['type'].split('.')[0] == 'monsters':
-                        for e2 in l['entities']:
-                            if e2['active'] and 'sid' in e2['components'].keys():  # noqa
-                                pos1 = e['components']['position']
-                                pos2 = e2['components']['position']
+                        # If given a specific entity, just check if that one is
+                        #     involved in combat
+                        if entity:
+                            pos1 = e['components']['position']
+                            pos2 = entity['components']['position']
 
-                                distance = math.sqrt(
-                                    (pos1['x'] - pos2['x'])**2 +
-                                    (pos1['y'] - pos2['y'])**2
-                                )
+                            distance = math.sqrt(
+                                (pos1['x'] - pos2['x'])**2 +
+                                (pos1['y'] - pos2['y'])**2
+                            )
 
-                                if distance <= e['components']['range']:
-                                    e['combat'] = {
-                                        'in_combat': True,
-                                        'opponent': e2['components']['sid']['sid']  # noqa
-                                    }
+                            if distance <= e['components']['range']:
+                                e['combat'] = {
+                                    'in_combat': True,
+                                    'opponent': entity['components']['sid']['sid']  # noqa
+                                }
 
-                                    e2['combat'] = {
-                                        'in_combat': True
-                                    }
+                                entity['combat'] = {
+                                    'in_combat': True
+                                }
+
+                        else:
+                            for e2 in l['entities']:
+                                if e2['active'] and 'sid' in e2['components'].keys():  # noqa
+                                    pos1 = e['components']['position']
+                                    pos2 = e2['components']['position']
+
+                                    distance = math.sqrt(
+                                        (pos1['x'] - pos2['x'])**2 +
+                                        (pos1['y'] - pos2['y'])**2
+                                    )
+
+                                    if distance <= e['components']['range']:
+                                        e['combat'] = {
+                                            'in_combat': True,
+                                            'opponent': e2['components']['sid']['sid']  # noqa
+                                        }
+
+                                        e2['combat'] = {
+                                            'in_combat': True
+                                        }
                 except KeyError:
                     pass

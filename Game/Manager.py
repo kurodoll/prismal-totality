@@ -165,14 +165,17 @@ class Manager:
                     ent['updated'] = True
 
                     # Update combat stuff
+                    self.WorldManager.checkForCombat(
+                        self.players[sid]['on level'],
+                        ent
+                    )
+
                     if 'combat' in ent.keys() and ent['combat']['in_combat']:
                         self.EntityManager.playerInCombatMoved(
                             sid,
                             self.getPresentLevel(sid),
                             self.WorldManager
                         )
-
-                    self.WorldManager.checkForCombat(self.players[sid]['on level'])  # noqa
 
                     if response['message']:
                         return {
@@ -188,14 +191,17 @@ class Manager:
                     pos['y'] = old_y
 
                     # Update combat stuff
+                    self.WorldManager.checkForCombat(
+                        self.players[sid]['on level'],
+                        ent
+                    )
+
                     if 'combat' in ent.keys() and ent['combat']['in_combat']:
                         self.EntityManager.playerInCombatMoved(
                             sid,
                             self.getPresentLevel(sid),
                             self.WorldManager
                         )
-
-                    self.WorldManager.checkForCombat(self.players[sid]['on level'])  # noqa
 
                     return {
                         'response': 'message',
