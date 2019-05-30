@@ -1,5 +1,7 @@
 from log import log
+
 import json
+import random
 
 
 class EntityManager:
@@ -74,3 +76,43 @@ class EntityManager:
                 if 'new' in e.keys() and e['new']:
                     self.loadEntity(e)
                     e['new'] = False
+
+    def entityMakeMove(self, entity_id, level_id, world_manager):
+        e = self.entities[entity_id]
+
+        if e['components']['movement'] == 'random':
+            x = e['components']['position']['x']
+            y = e['components']['position']['y']
+
+            adjacent_spots = [
+                {'x': x - 1, 'y': y - 1},
+                {'x': x, 'y': y - 1},
+                {'x': x + 1, 'y': y - 1},
+                {'x': x - 1, 'y': y},
+                {'x': x + 1, 'y': y},
+                {'x': x - 1, 'y': y + 1},
+                {'x': x, 'y': y + 1},
+                {'x': x + 1, 'y': y + 1}
+            ]
+
+            possible_spots = []
+
+            for a in adjacent_spots:
+                if world_manager.validMove(level_id, a)['success']:
+                    possible_spots.append(a)
+
+            res = random.randint(0, len(possible_spots) - 1)
+
+            e['components']['position'] = possible_spots[res]
+            e['updated'] = True
+
+    # If a player is in combat, tell their opponent(s) that they can make a
+    #     move
+    def playerInCombatMoved(self, sid, level, world_manager):
+        if 'entities' in level.keys():
+            for e in level['entities']:
+                try:
+                    if e['combat']['opponent'] == sid:
+                        self.entityMakeMove(e['id'], level['id'], world_manager)  # noqa
+                except KeyError:
+                    pass

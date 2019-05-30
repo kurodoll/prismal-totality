@@ -20,7 +20,22 @@
                 "health": 5,
                 "strength": 1
             },
-            "movement": "random"
+            "movement": "random",
+            "range": 5
+        }
+    },
+    "floating paper (aggressive)": {
+        "components": {
+            "name": "Floating Paper (Aggressive)",
+            "sprite": {
+                "sprite": "floating paper"
+            },
+            "stats": {
+                "health": 5,
+                "strength": 1
+            },
+            "movement": "random/chase",
+            "range": 5
         }
     }
 }

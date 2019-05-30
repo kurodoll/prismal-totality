@@ -1,6 +1,7 @@
 from log import log
 
 import json
+import math
 import random
 
 
@@ -280,31 +281,50 @@ class WorldManager:
             if 'entities' in l.keys():
                 for e in l['entities']:
                     try:
+                        # Entities in combat don't move freely
+                        if 'combat' in e.keys():
+                            if e['combat']['in_combat']:
+                                continue
+
                         if e['components']['movement'] and e['active']:
-                            if e['components']['movement'] == 'random':
-                                x = e['components']['position']['x']
-                                y = e['components']['position']['y']
-
-                                adjacent_spots = [
-                                    {'x': x - 1, 'y': y - 1},
-                                    {'x': x, 'y': y - 1},
-                                    {'x': x + 1, 'y': y - 1},
-                                    {'x': x - 1, 'y': y},
-                                    {'x': x + 1, 'y': y},
-                                    {'x': x - 1, 'y': y + 1},
-                                    {'x': x, 'y': y + 1},
-                                    {'x': x + 1, 'y': y + 1}
-                                ]
-
-                                possible_spots = []
-
-                                for a in adjacent_spots:
-                                    if self.validMove(level_id, a)['success']:
-                                        possible_spots.append(a)
-
-                                res = random.randint(0, len(possible_spots) - 1)  # noqa
-
-                                e['components']['position'] = possible_spots[res]  # noqa
-                                e['updated'] = True
+                            entity_manager.entityMakeMove(
+                                e['id'],
+                                level_id,
+                                self
+                            )
                     except KeyError:
                         pass
+
+            self.checkForCombat(level_id)
+
+    def checkForCombat(self, level_id):
+        l = self.levels[level_id]  # noqa
+
+        if 'entities' in l.keys():
+            for e in l['entities']:
+                try:
+                    if 'range' not in e['components'].keys():
+                        continue
+
+                    if e['active'] and e['type'].split('.')[0] == 'monsters':
+                        for e2 in l['entities']:
+                            if e2['active'] and 'sid' in e2['components'].keys():  # noqa
+                                pos1 = e['components']['position']
+                                pos2 = e2['components']['position']
+
+                                distance = math.sqrt(
+                                    (pos1['x'] - pos2['x'])**2 +
+                                    (pos1['y'] - pos2['y'])**2
+                                )
+
+                                if distance <= e['components']['range']:
+                                    e['combat'] = {
+                                        'in_combat': True,
+                                        'opponent': e2['components']['sid']['sid']  # noqa
+                                    }
+
+                                    e2['combat'] = {
+                                        'in_combat': True
+                                    }
+                except KeyError:
+                    pass
