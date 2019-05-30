@@ -280,3 +280,4 @@ class Manager:
     # Handle all periodic updates to the world
     def doUpdates(self):
         self.WorldManager.spawnMonsters(self.EntityManager)
+        self.WorldManager.updateMonsters(self.EntityManager)

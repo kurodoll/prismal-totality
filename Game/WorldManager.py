@@ -259,3 +259,39 @@ class WorldManager:
                             'Spawned a ' + e['type'] + ' to level ' + l['title'],  # noqa
                             'debug'
                         )
+
+    def updateMonsters(self, entity_manager):
+        for level_id in self.levels.keys():
+            l = self.levels[level_id]  # noqa
+
+            if 'entities' in l.keys():
+                for e in l['entities']:
+                    try:
+                        if e['components']['movement'] and e['active']:
+                            if e['components']['movement'] == 'random':
+                                x = e['components']['position']['x']
+                                y = e['components']['position']['y']
+
+                                adjacent_spots = [
+                                    {'x': x - 1, 'y': y - 1},
+                                    {'x': x, 'y': y - 1},
+                                    {'x': x + 1, 'y': y - 1},
+                                    {'x': x - 1, 'y': y},
+                                    {'x': x + 1, 'y': y},
+                                    {'x': x - 1, 'y': y + 1},
+                                    {'x': x, 'y': y + 1},
+                                    {'x': x + 1, 'y': y + 1}
+                                ]
+
+                                possible_spots = []
+
+                                for a in adjacent_spots:
+                                    if self.validMove(level_id, a)['success']:
+                                        possible_spots.append(a)
+
+                                res = random.randint(0, len(possible_spots) - 1)  # noqa
+
+                                e['components']['position'] = possible_spots[res]  # noqa
+                                e['updated'] = True
+                    except KeyError:
+                        pass

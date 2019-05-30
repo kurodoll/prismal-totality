@@ -19,7 +19,8 @@
             "stats": {
                 "health": 5,
                 "strength": 1
-            }
+            },
+            "movement": "random"
         }
     }
 }
