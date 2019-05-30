@@ -195,6 +195,12 @@ class Manager:
                     for i in range(0, len(level['entities'])):
                         if 'sid' in level['entities'][i]['components']:
                             if level['entities'][i]['components']['sid']['sid'] == sid:  # noqa
+                                stairs_pos = self.WorldManager.getTilePos(on_level, 'stairs down')  # noqa
+
+                                # If the player isn't on stairs, ignore
+                                if stairs_pos != level['entities'][i]['components']['position']:  # noqa
+                                    return
+
                                 self.entities_to_destroy.append(
                                     {
                                         'level': on_level,

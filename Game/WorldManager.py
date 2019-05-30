@@ -203,6 +203,19 @@ class WorldManager:
             'message': 'You cannot move there'
         }
 
+    # Get the coordinates of a certain tile type.
+    # If there is more than one, just returns the first found
+    def getTilePos(self, level_id, tile_type):
+        level = self.levels[level_id]
+
+        for x in range(0, level['level']['width'] - 1):
+            for y in range(0, level['level']['height'] - 1):
+                if level['level']['tiles'][(y * level['level']['width'] + x)] == tile_type:  # noqa
+                    return {
+                        'x': x,
+                        'y': y
+                    }
+
     # Finds a random valid spawn location in a level
     def getRandomSpawn(self, level):
         valid_tiles = []
