@@ -130,36 +130,38 @@ class Manager:
                 ent = self.EntityManager.getEntity(self.players[sid]['entity'])
                 pos = ent['components']['position']
 
-                old_x = int(pos['x'])
-                old_y = int(pos['y'])
+                new_pos = pos.copy()
 
                 if 'dir' in details.keys() and details['dir'] == '1':
-                    pos['x'] -= 1
-                    pos['y'] += 1
+                    new_pos['x'] -= 1
+                    new_pos['y'] += 1
                 elif 'dir' in details.keys() and details['dir'] == '2':
-                    pos['y'] += 1
+                    new_pos['y'] += 1
                 elif 'dir' in details.keys() and details['dir'] == '3':
-                    pos['x'] += 1
-                    pos['y'] += 1
+                    new_pos['x'] += 1
+                    new_pos['y'] += 1
                 elif 'dir' in details.keys() and details['dir'] == '4':
-                    pos['x'] -= 1
+                    new_pos['x'] -= 1
                 elif 'dir' in details.keys() and details['dir'] == '6':
-                    pos['x'] += 1
+                    new_pos['x'] += 1
                 elif 'dir' in details.keys() and details['dir'] == '7':
-                    pos['x'] -= 1
-                    pos['y'] -= 1
+                    new_pos['x'] -= 1
+                    new_pos['y'] -= 1
                 elif 'dir' in details.keys() and details['dir'] == '8':
-                    pos['y'] -= 1
+                    new_pos['y'] -= 1
                 elif 'dir' in details.keys() and details['dir'] == '9':
-                    pos['x'] += 1
-                    pos['y'] -= 1
+                    new_pos['x'] += 1
+                    new_pos['y'] -= 1
 
                 response = self.WorldManager.validMove(
                     self.players[sid]['on level'],
-                    pos
+                    new_pos
                 )
 
                 if response['success']:
+                    pos['x'] = new_pos['x']
+                    pos['y'] = new_pos['y']
+
                     # Mark the entity as updated, so that it will be sent to
                     #     users
                     ent['updated'] = True
@@ -174,7 +176,8 @@ class Manager:
                         self.EntityManager.playerInCombatMoved(
                             sid,
                             self.getPresentLevel(sid),
-                            self.WorldManager
+                            self.WorldManager,
+                            self.CombatManager
                         )
 
                     if response['message']:
@@ -187,9 +190,6 @@ class Manager:
                     if response['message'] == 'monster':
                         response['message'] = self.CombatManager.attack(ent, response['data'])  # noqa
 
-                    pos['x'] = old_x
-                    pos['y'] = old_y
-
                     # Update combat stuff
                     self.WorldManager.checkForCombat(
                         self.players[sid]['on level'],
@@ -200,7 +200,8 @@ class Manager:
                         self.EntityManager.playerInCombatMoved(
                             sid,
                             self.getPresentLevel(sid),
-                            self.WorldManager
+                            self.WorldManager,
+                            self.CombatManager
                         )
 
                     return {
@@ -312,4 +313,4 @@ class Manager:
     # Handle all periodic updates to the world
     def doUpdates(self):
         self.WorldManager.spawnMonsters(self.EntityManager)
-        self.WorldManager.updateMonsters(self.EntityManager)
+        self.WorldManager.updateMonsters(self.EntityManager, self.CombatManager)  # noqa

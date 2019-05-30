@@ -77,7 +77,7 @@ class EntityManager:
                     self.loadEntity(e)
                     e['new'] = False
 
-    def entityMakeMove(self, entity_id, level_id, world_manager):
+    def entityMakeMove(self, entity_id, level_id, world_manager, combat_manager):  # noqa
         e = self.entities[entity_id]
 
         if e['components']['movement'] == 'random':
@@ -98,21 +98,31 @@ class EntityManager:
             possible_spots = []
 
             for a in adjacent_spots:
-                if world_manager.validMove(level_id, a)['success']:
+                res = world_manager.validMove(level_id, a)
+
+                if res['success'] or res['message'] == 'player':
                     possible_spots.append(a)
+
+                    if res['message'] == 'player':
+                        a['attack'] = True
+                        a['data'] = res['data']
 
             res = random.randint(0, len(possible_spots) - 1)
 
-            e['components']['position'] = possible_spots[res]
-            e['updated'] = True
+            if 'attack' in possible_spots[res].keys():
+                # The entity has attacked a player
+                combat_manager.attack(e, possible_spots[res]['data'])
+            else:
+                e['components']['position'] = possible_spots[res]
+                e['updated'] = True
 
     # If a player is in combat, tell their opponent(s) that they can make a
     #     move
-    def playerInCombatMoved(self, sid, level, world_manager):
+    def playerInCombatMoved(self, sid, level, world_manager, combat_manager):
         if 'entities' in level.keys():
             for e in level['entities']:
                 try:
                     if e['combat']['opponent'] == sid:
-                        self.entityMakeMove(e['id'], level['id'], world_manager)  # noqa
+                        self.entityMakeMove(e['id'], level['id'], world_manager, combat_manager)  # noqa
                 except KeyError:
                     pass

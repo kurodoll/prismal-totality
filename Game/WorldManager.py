@@ -188,6 +188,13 @@ class WorldManager:
                                 'message': 'monster',
                                 'data': e
                             }
+                        elif 'sid' in e['components']:
+                            # Player is being attacked
+                            return {
+                                'success': False,
+                                'message': 'player',
+                                'data': e
+                            }
 
             return {
                 'success': True,
@@ -274,7 +281,7 @@ class WorldManager:
                             'debug'
                         )
 
-    def updateMonsters(self, entity_manager):
+    def updateMonsters(self, entity_manager, combat_manager):
         for level_id in self.levels.keys():
             l = self.levels[level_id]  # noqa
 
@@ -290,7 +297,8 @@ class WorldManager:
                             entity_manager.entityMakeMove(
                                 e['id'],
                                 level_id,
-                                self
+                                self,
+                                combat_manager
                             )
                     except KeyError:
                         pass
